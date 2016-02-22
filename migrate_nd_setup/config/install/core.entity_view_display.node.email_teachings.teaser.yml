@@ -1,0 +1,29 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.email_teachings.body
+    - field.field.node.email_teachings.field_teaching_tags
+    - node.type.email_teachings
+  module:
+    - text
+    - user
+id: node.email_teachings.teaser
+targetEntityType: node
+bundle: email_teachings
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 1
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+  links:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  field_teaching_tags: true

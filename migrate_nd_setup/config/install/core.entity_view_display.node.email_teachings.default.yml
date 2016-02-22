@@ -1,0 +1,33 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.email_teachings.body
+    - field.field.node.email_teachings.field_teaching_tags
+    - node.type.email_teachings
+  module:
+    - text
+    - user
+id: node.email_teachings.default
+targetEntityType: node
+bundle: email_teachings
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+  field_teaching_tags:
+    weight: 3
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  links:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

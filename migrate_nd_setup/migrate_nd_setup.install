@@ -1,0 +1,287 @@
+<?php
+
+/**
+ * @file
+ * Set up source data and destination configuration for the migration example
+ * module. We do this in a separate module so migrate_nd itself is a pure
+ * migration module.
+ */
+
+function migrate_nd_setup_schema() {
+  $schema['migrate_nd_dyn_account'] = migrate_nd_dyn_schema_account();
+  $schema['migrate_nd_dyn_node'] = migrate_nd_dyn_schema_node();
+  $schema['migrate_nd_dyn_topic'] = migrate_nd_dyn_schema_topic();
+  $schema['migrate_nd_dyn_topic_node'] = migrate_nd_dyn_schema_topic_node();
+
+  return $schema;
+}
+
+function migrate_nd_setup_install() {
+  // Populate our tables.
+  migrate_nd_dyn_data_account();
+  migrate_nd_dyn_data_node();
+  migrate_nd_dyn_data_topic();
+  migrate_nd_dyn_data_topic_node();
+}
+
+function migrate_nd_dyn_schema_node() {
+   return array(
+    'description' => 'Migrate Example SSD Styles.',
+    'fields' => array(
+      'bbid'  => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Ssd ID.',
+      ),
+      'title'  => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'dt_created' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Full description.',
+      ),
+      'abstract' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'description' => 'p',
+      ),
+      'article' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'description' => 'a',
+      ),
+      'aid' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => 'Account Id of the author.',
+      ),
+    ),
+    'primary key' => array('bbid'),
+  );
+}
+
+function migrate_nd_dyn_schema_topic() {
+  return array(
+    'description' => 'Categories',
+    'fields' => array(
+      'style'  => array(
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
+      'details' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+      ),
+      'style_parent' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Parent topic, if any',
+      ),
+      'region' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Region first associated with this style',
+      ),
+      'hoppiness' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Relative hoppiness of the dyn',
+      ),
+    ),
+    'primary key' => array('style'),
+  );
+}
+
+function migrate_nd_dyn_schema_topic_node() {
+  return array(
+    'description' => 'Dyns topic pairs.',
+    'fields' => array(
+      'bbid'  => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Dyn ID.',
+      ),
+      'style'  => array(
+        'type' => 'varchar_ascii',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Topic name',
+      ),
+    ),
+    'primary key' => array('style', 'bbid'),
+  );
+}
+
+
+function migrate_nd_dyn_schema_account() {
+  return array(
+    'description' => 'Dyns accounts.',
+    'fields' => array(
+      'aid'  => array(
+        'type' => 'serial',
+        //'not null' => TRUE,
+        'description' => 'Account ID',
+      ),
+      'status'  => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => 'Blocked_Allowed',
+      ),
+      'registered' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'Registration date',
+      ),
+      'username' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Account name (for login)',
+      ),
+      'nickname' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Account name (for display)',
+      ),
+      'password' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Account password (raw)',
+      ),
+      'email' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Account email',
+      ),
+      'sex' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => 'Gender (0 for male, 1 for female)',
+      ),
+      'dyns' => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => FALSE,
+        'description' => 'Favorite Dyns',
+      ),
+    ),
+    'primary key' => array('aid'),
+  );
+}
+
+function migrate_nd_dyn_data_node() {
+
+$q1 = db_select('res_manager', 'r');
+  $obj=$q1->fields('r',array('id','title','dt_created','abstract','article'))//SELECT 
+        ->condition('category_id', '20')
+        ->execute()->fetchAll();
+  
+  $i=0;
+  foreach ( $obj as $obj1 ) {
+    $data[$i][0]=$obj1->id;
+    $data[$i][1]=$obj1->title;
+    $data[$i][2]=$obj1->dt_created;
+    $data[$i][3]=$obj1->abstract;
+    $data[$i][4]=$obj1->abstract ."<br><br>". $obj1->article;
+    $data[$i][5]=1;
+    $i+=1;
+
+  }
+
+
+ $fields = array('bbid', 'title', 'dt_created','abstract','article','aid');
+  $query = db_insert('migrate_nd_dyn_node')
+           ->fields($fields);
+  // Use high id numbers to avoid overwriting an existing node id.
+  
+  foreach ($data as $row) {
+    $query->values(array_combine($fields, $row));
+  }
+  $query->execute();
+}
+
+// Note that alice has duplicate username. Exercises dedupe_entity plugin.
+// @TODO duplicate email also.
+function migrate_nd_dyn_data_account() {
+  $fields = array('status', 'registered', 'username', 'nickname', 'password', 'email', 'sex', 'dyns');
+  $query = db_insert('migrate_nd_dyn_account')
+    ->fields($fields);
+  $data = array(
+    array(1, '2010-03-30 10:31:05', 'alice', 'alice in dynland', 'alicepass', 'alice@example.com', '1', '99999999|99999998|99999997'),
+    array(1, '2010-04-04 10:31:05', 'alice', 'alice in aleland', 'alicepass', 'alice2@example.com', '1', '99999999|99999998|99999997'),
+    array(0, '2007-03-15 10:31:05', 'bob', 'rebob', 'bobpass', 'bob@example.com', '0', '99999999|99999997'),
+    array(1, '2004-02-29 10:31:05', 'charlie', 'charlie chocolate', 'mykids', 'charlie@example.com', '0', '99999999|99999998'),
+  );
+  foreach ($data as $row) {
+    $query->values(array_combine($fields, $row));
+  }
+  $query->execute();
+}
+
+
+function migrate_nd_dyn_data_topic() {
+  $fields = array('style', 'details', 'style_parent', 'region', 'hoppiness');
+  $query = db_insert('migrate_nd_dyn_topic')
+    ->fields($fields);
+  $data = array(
+    array('Miscellaneous Heart of Awakening', 'traditional', NULL, 'Medieval British Isles', 'Medium'),
+    array('red ale', 'colorful', 'ale', NULL, NULL),
+    array('pilsner', 'refreshing', NULL, 'Pilsen, Bohemia (now Czech Republic)', 'Low'),
+  );
+  foreach ($data as $row) {
+    $query->values(array_combine($fields, $row));
+  }
+  $query->execute();
+}
+
+function migrate_nd_dyn_data_topic_node() {
+  $fields = array('bbid', 'style');
+
+
+  $obj = db_query('SELECT lrc.res_id, rc.class_name
+FROM lnk_res_class lrc, res_classifications rc, res_manager rm
+WHERE lrc.class_id = rc.id
+AND rm.id = lrc.res_id
+AND rm.category_id =20');
+
+
+
+
+       /** $query = db_select('lnk_res_class', 'lrc');
+$query->join('res_classifications', 'rc', 'rc.id = lrc.class_id');
+$query->join('res_manager', 'rm', 'rm.id = lrc.res_id');
+$obj = $query
+  ->fields('lrc', array('res_id'))
+  ->fields('rc', array('class_name'))
+  ->fields('rm', array('category_id'))
+  ->condition('category_id','20')
+  ->execute();*/
+  
+  $i=0;
+  foreach ( $obj as $obj1 ) {
+    $data[$i][0]=$obj1->res_id;
+    $data[$i][1]=$obj1->class_name;
+    $i+=1;
+  }
+
+
+  $query = db_insert('migrate_nd_dyn_topic_node')
+    ->fields($fields);
+  foreach ($data as $row) {
+    $query->values(array_combine($fields, $row));
+  }
+  $query->execute();
+}
