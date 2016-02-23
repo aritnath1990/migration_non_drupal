@@ -1,8 +1,0 @@
-langcode: en
-status: true
-dependencies: {  }
-name: 'Teaching Tags'
-vid: teaching_tags
-description: 'Tags to classify teachings'
-hierarchy: 0
-weight: 0

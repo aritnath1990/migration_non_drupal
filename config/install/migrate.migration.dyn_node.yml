@@ -20,7 +20,7 @@ process:
   sticky:
     plugin: default_value
     default_value: 0
-  field_teaching_tags:
+  field_tags:
     plugin: migration
     migration: dyn_term
     source: terms
@@ -31,6 +31,7 @@ process:
   # YAML special character.
   'body/value': article
   'body/summary': abstract
+  'body/format': bodyformat
 # Our dyn nodes have references to terms and users, so we want those to be
 # imported first. We make that dependency explicit here - by putting those
 # migrations under the 'required' key, we ensure that the tools will prevent

@@ -59,6 +59,11 @@ function migrate_nd_dyn_schema_node() {
         'not null' => FALSE,
         'description' => 'Account Id of the author.',
       ),
+      'bodyformat'  => array(
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+      ),
     ),
     'primary key' => array('bbid'),
   );
@@ -197,12 +202,13 @@ $q1 = db_select('res_manager', 'r');
     $data[$i][3]=$obj1->abstract;
     $data[$i][4]=$obj1->abstract ."<br><br>". $obj1->article;
     $data[$i][5]=1;
+    $data[$i][6]="basic_html";
     $i+=1;
 
   }
 
 
- $fields = array('bbid', 'title', 'dt_created','abstract','article','aid');
+ $fields = array('bbid', 'title', 'dt_created','abstract','article','aid','bodyformat');
   $query = db_insert('migrate_nd_dyn_node')
            ->fields($fields);
   // Use high id numbers to avoid overwriting an existing node id.
@@ -220,11 +226,8 @@ function migrate_nd_dyn_data_account() {
   $query = db_insert('migrate_nd_dyn_account')
     ->fields($fields);
   $data = array(
-    array(1, '2010-03-30 10:31:05', 'alice', 'alice in dynland', 'alicepass', 'alice@example.com', '1', '99999999|99999998|99999997'),
-    array(1, '2010-04-04 10:31:05', 'alice', 'alice in aleland', 'alicepass', 'alice2@example.com', '1', '99999999|99999998|99999997'),
-    array(0, '2007-03-15 10:31:05', 'bob', 'rebob', 'bobpass', 'bob@example.com', '0', '99999999|99999997'),
-    array(1, '2004-02-29 10:31:05', 'charlie', 'charlie chocolate', 'mykids', 'charlie@example.com', '0', '99999999|99999998'),
-  );
+    array(1, '2010-03-30 10:31:05', 'Jonathan', 'Jonathan in Irnland', 'alicepass', 'alice@example.com', '1', '1|2|3'),
+    );
   foreach ($data as $row) {
     $query->values(array_combine($fields, $row));
   }
@@ -238,9 +241,7 @@ function migrate_nd_dyn_data_topic() {
     ->fields($fields);
   $data = array(
     array('Miscellaneous Heart of Awakening', 'traditional', NULL, 'Medieval British Isles', 'Medium'),
-    array('red ale', 'colorful', 'ale', NULL, NULL),
-    array('pilsner', 'refreshing', NULL, 'Pilsen, Bohemia (now Czech Republic)', 'Low'),
-  );
+   );
   foreach ($data as $row) {
     $query->values(array_combine($fields, $row));
   }

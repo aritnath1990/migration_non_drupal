@@ -35,7 +35,7 @@ class DynNode extends SqlBase {
      * below.
      */
     $query = $this->select('migrate_nd_dyn_node', 'b')
-                 ->fields('b', ['bbid', 'title', 'dt_created','abstract','article','aid']);
+                 ->fields('b', ['bbid', 'title', 'dt_created','abstract','article','aid','bodyformat']);
     return $query;
   }
 
@@ -50,6 +50,7 @@ class DynNode extends SqlBase {
       'abstract' => $this->t('Abstract for this ssd'),
       'article' => $this->t('Article of ssd'),
       'aid' => $this->t('Account ID of the author'),
+      'bodyformat' => $this->t('Text format i.e html or full html'),
       'terms' => $this->t('Applicable styles'),
     ];
 
