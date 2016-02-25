@@ -47,7 +47,7 @@ process:
   # 'default_value:' line is an actual value.
   vid:
     plugin: default_value
-    default_value: teaching_tags
+    default_value: teachings_tags
 
   # Here's another new plugin - migration. When importing data from another
   # system, typically the unique identifiers for items on the destination side
