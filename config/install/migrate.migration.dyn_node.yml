@@ -7,10 +7,10 @@ source:
 destination:
   plugin: entity:node
 process:
-  # Hardcode the destination node type (bundle) as 'email_teachings'.
+  # Hardcode the destination node type (bundle) as 'email_teaching'.
   type:
     plugin: default_value
-    default_value: email_teachings
+    default_value: email_teaching
   title: title
   nid: bbid
   uid:

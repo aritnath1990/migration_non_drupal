@@ -3,7 +3,7 @@ status: true
 dependencies:
   config:
     - field.storage.user.field_migrate_nd_favdyns
-    - node.type.email_teachings
+    - node.type.email_teaching
   module:
     - user
 id: user.user.field_migrate_nd_favdyns
@@ -20,7 +20,7 @@ settings:
   handler: 'default:node'
   handler_settings:
     target_bundles:
-      email_teachings: email_teachings
+      email_teaching: email_teaching
     sort:
       field: title
       direction: ASC
