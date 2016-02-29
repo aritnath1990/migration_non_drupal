@@ -20,6 +20,9 @@ process:
   sticky:
     plugin: default_value
     default_value: 0
+  promote:
+    plugin: default_value
+    default_value: 0
   field_tags:
     plugin: migration
     migration: dyn_term

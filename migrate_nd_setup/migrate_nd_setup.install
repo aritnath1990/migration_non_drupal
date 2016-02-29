@@ -200,7 +200,93 @@ $q1 = db_select('res_manager', 'r');
     $data[$i][1]=$obj1->title;
     $data[$i][2]=$obj1->dt_created;
     $data[$i][3]=$obj1->abstract;
-    $data[$i][4]=$obj1->article;
+    $r=$obj1->article;
+
+    $obj1->abstract = ucfirst($obj1->abstract); 
+    if (substr_count($r, $obj1->abstract) > 0 ) {
+      $r=str_replace($obj1->abstract,"",$r);
+    }
+
+    if (substr_count($r, 'Summary: ') > 0 ) {
+      $r=str_replace('Summary: ',"",$r);
+    }
+    
+    
+    if (substr_count($r, '<p>A student writes:</p>') > 0) {
+    $r=str_replace("<p>A student writes:</p>","<blockquote>",$r);
+    }
+    if (substr_count($r, '<p><em>A student writes:</em></p>') > 0) {
+    $r=str_replace("<p><em>A student writes:</em></p>","<blockquote>",$r);
+    }
+    if (substr_count($r, 'A student writes:') > 0) {
+    $r=str_replace("A student writes:","<blockquote>",$r);
+    }
+
+    if (substr_count($r, '<p>A practitioner writes:</p>') > 0) {
+    $r=str_replace("<p>A practitioner writes:</p>","<blockquote>",$r);
+    }
+    if (substr_count($r, '<p><em>A practitioner writes:</em></p>') > 0) {
+    $r=str_replace("<p><em>A practitioner writes:</em></p>","<blockquote>",$r);
+    }
+    if (substr_count($r, 'A practitioner writes:') > 0) {
+    $r=str_replace("A practitioner writes:","<blockquote>",$r);
+    }
+
+    if (substr_count($r, '<p>A student asks:</p>') > 0) {
+    $r=str_replace("<p>A student asks:</p>","<blockquote>",$r);
+    }
+    if (substr_count($r, '<p><em>A student asks:</em></p>') > 0) {
+    $r=str_replace("<p><em>A student asks:</em></p>","<blockquote>",$r);
+    }
+    if (substr_count($r, 'A student asks:') > 0) {
+    $r=str_replace("A student asks:","<blockquote>",$r);
+    }
+
+
+    if (substr_count($r, '<p>The student asks:</p>') > 0) {
+    $r=str_replace("<p>The student asks:</p>","<blockquote>",$r);
+    }
+    if (substr_count($r, '<p><em>The student asks:</em></p>') > 0) {
+    $r=str_replace("<p><em>The student asks:</em></p>","<blockquote>",$r);
+    }
+    if (substr_count($r, 'The student asks:') > 0) {
+    $r=str_replace("The student asks:","<blockquote>",$r);
+    }
+
+    $r=str_replace("<p>Lama Shenpen replies:</p>","</blockquote>",$r);
+    $r=str_replace("<p><em>Lama Shenpen replies:</em></p>","</blockquote>",$r);
+    $r=str_replace(" <br /> <br /> Lama Shenpen replies:<br /> <br />","</blockquote>",$r);
+    $r=str_replace("Lama Shenpen replies:","</blockquote>",$r);
+
+    $r=str_replace("<p>Lama Shenpen:</p>","</blockquote>",$r);
+    $r=str_replace("<p><em>Lama Shenpen:</em></p>","</blockquote>",$r);
+    $r=str_replace(" <br /> <br /> Lama Shenpen:<br /> <br />","</blockquote>",$r);
+     $r=str_replace("Lama Shenpen:","</blockquote>",$r);
+    
+    $r=str_replace("<p>Shenpen replies:</p>","</blockquote>",$r);
+    $r=str_replace("<p><em>Shenpen replies:</em></p>","</blockquote>",$r);
+    $r=str_replace(" <br /> <br /> Shenpen replies:<br /> <br />","</blockquote>",$r);
+    $r=str_replace("Shenpen replies:","</blockquote>",$r);
+    
+    if (substr_count($r, '<strong>') > 0) {
+    $r=str_replace("<strong>","<em>",$r);
+    }
+    if (substr_count($r, '</strong>') > 0) {
+    $r=str_replace("</strong>","</em>",$r);
+    }
+    if (substr_count($r, 'â€™') > 0) {
+    $r=str_replace("â€™","'",$r);
+    }
+    if (substr_count($r, 'â€tm') > 0) {
+    $r=str_replace("â€tm","'",$r);
+    }
+    /**Student:
+â€tm
+â€™
+A practitioner writes:
+
+    */
+    $data[$i][4]=$r;//obj1->article;
     $data[$i][5]=1;
     $data[$i][6]="basic_html";
     $i+=1;
