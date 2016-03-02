@@ -35,7 +35,8 @@ class DynNode extends SqlBase {
      * below.
      */
     $query = $this->select('migrate_nd_dyn_node', 'b')
-                 ->fields('b', ['bbid', 'title', 'dt_created','abstract','article','aid','bodyformat']);
+                 ->fields('b', ['bbid', 'title', 'abstract','article','aid','bodyformat']);
+    $query->addExpression('UNIX_TIMESTAMP(dt_created)', 'dt_created');
     return $query;
   }
 

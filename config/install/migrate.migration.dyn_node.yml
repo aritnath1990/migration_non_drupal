@@ -13,6 +13,8 @@ process:
     default_value: email_teaching
   title: title
   nid: bbid
+  created: dt_created
+  changed: dt_created
   uid:
     plugin: migration
     migration: dyn_user
