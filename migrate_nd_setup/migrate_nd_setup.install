@@ -325,8 +325,8 @@ $r=str_replace("<p>&nbsp;</p>",'',$r);
     $r=str_replace("<p><br /><blockquote><br />","<blockquote>",$r);
     $r=str_replace("<br /><br /></blockquote><br /><br />","</blockquote>",$r);
     $r=str_replace("<p><blockquote> </p>","<blockquote>",$r);
-    $r=str_replace("<p><blockquote></p>","<blockquote>",$r);
-
+    $r=str_replace("<p>","",$r);
+    $r=str_replace("</p>","",$r);
     //$r=str_replace("","",$r);
 
     
