@@ -335,7 +335,7 @@ $r=str_replace("<p>&nbsp;</p>",'',$r);
 
     $data[$i][4]=$r;//obj1->article;
     $data[$i][5]=1;
-    $data[$i][6]="NULL";
+    $data[$i][6]="basic_html";
     $i+=1;
 
   }
