@@ -291,13 +291,51 @@ $q1 = db_select('res_manager', 'r');
     if (substr_count($r, 'Summary:') > 0 ) {
       $r=str_replace('Summary:',"",$r);
     }
-
-
     $r=str_replace($obj1->abstract,"",$r);
+//================================================================
+$r=str_replace("<p>&nbsp;</p>",'',$r);
+    $r=str_replace("<p> ","<p>",$r);
+    $r=str_replace(" <p>","<p>",$r);
+
+    $r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
+
+    $r=str_replace("&nbsp;","",$r);
+    $r=str_replace("  "," ",$r);
+    //$r=preg_replace('/<br(.*?)>/i','',$r);
+
+    
+    $r=str_replace("â€™","'",$r);
+    $r=str_replace("â€tm","'",$r);
+    
+    $r=str_replace("<p><br />","<p>",$r);
+    $r=str_replace("<p>&nbsp;","<p>",$r);
+    $r=str_replace("<p></p>","<p>",$r);
+    $r=str_replace("<blockquote><br />","<blockquote>",$r);
+    $r=str_replace("<br /><br /><blockquote>","<blockquote>",$r);
+    $r=str_replace("<br /><blockquote>","<blockquote>",$r);
+    $r=str_replace("<blockquote><br /><br />","<blockquote>",$r);
+    $r=str_replace("<blockquote><br />","<blockquote>",$r);
+    $r=str_replace("<br />&nbsp;</blockquote>","</blockquote>",$r);
+    $r=str_replace("<p>&nbsp;</p>","",$r);
+    $r=str_replace("<p><br />&nbsp;</p>","",$r);
+    $r=str_replace("<p><br />&nbsp;<br /></p>","",$r);
+    $r=str_replace("<p>&nbsp;<br /></p>","",$r);
+    $r=str_replace("<p> <br /> <blockquote> <br /> ","<blockquote>",$r);
+    $r=str_replace("<br /> <br /> </blockquote><br /> <br /> ","</blockquote>",$r);
+    $r=str_replace("<p><br /><blockquote><br />","<blockquote>",$r);
+    $r=str_replace("<br /><br /></blockquote><br /><br />","</blockquote>",$r);
+    $r=str_replace("<p><blockquote> </p>","<blockquote>",$r);
+    $r=str_replace("<p><blockquote></p>","<blockquote>",$r);
+
+    //$r=str_replace("","",$r);
+
+    
+//================================================================
+    
 
     $data[$i][4]=$r;//obj1->article;
     $data[$i][5]=1;
-    $data[$i][6]="basic_html";
+    $data[$i][6]="NULL";
     $i+=1;
 
   }
