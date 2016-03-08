@@ -267,7 +267,7 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace('Summary:',"",$r);
     //--------------------------------------------------------------
     $r=str_replace("&nbsp;","",$r);
-    $r=preg_replace('/<p(.*?)>/i','',$r);
+   /** $r=preg_replace('/<p(.*?)>/i','',$r);
     $r=str_replace("<p> ","",$r);
     $r=str_replace(" <p>","",$r);
     $r=str_replace("<p>","",$r);
@@ -281,7 +281,7 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("<P>","",$r);
     $r=str_replace("</P> ","",$r);
     $r=str_replace(" </P>","",$r);
-    $r=str_replace("</P>","",$r);
+    $r=str_replace("</P>","",$r);*/
     $r=preg_replace('/&nbsp;/i','',$r);
     //--------------------------------------------------------------
     //$r = preg_replace('/\r?\n|\r/','', $r);
