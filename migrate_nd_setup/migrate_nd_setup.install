@@ -198,10 +198,6 @@ $q1 = db_select('res_manager', 'r');
   $i=0;
   foreach ( $obj as $obj1 ) {
     $data[$i][0]=$obj1->id;
-
-
-
-
     if (substr_count($obj1->title, 'â€™') > 0) {
     $obj1->title=str_replace("â€™","'",$obj1->title);
     }
@@ -215,25 +211,18 @@ $q1 = db_select('res_manager', 'r');
     $obj1->abstract=str_replace("â€™","'",$obj1->abstract);
     }
     $obj1->abstract = ucfirst($obj1->abstract); 
-    
     $obj1->abstract=str_replace("Summary: ","",$obj1->abstract);
     $obj1->abstract=str_replace("Summary:","",$obj1->abstract);
-
-    /**$obj1->abstract = str_replace(' ', '-', $obj1->abstract); // Replaces all spaces with hyphens.
-    $obj1->abstract = preg_replace('/[^A-Za-z0-9\-\.]/', ' ', $obj1->abstract); // Removes special chars.
-    $obj1->abstract=preg_replace('/-+/', ' ', $obj1->abstract); // Replaces multiple hyphens with single one.*/
 
     $a=substr($obj1->abstract, -1);
     if($a!="." && $a!="?") {
     $obj1->abstract =$obj1->abstract ."."; 
     }
-    
-
     $data[$i][3]=$obj1->abstract;
 
     $r=$obj1->article;
   
-
+    //--------------------------------------------------------------
     $r=str_replace('Summary: ',"",$r);
     $r=str_replace('Summary:',"",$r);
 
@@ -245,25 +234,16 @@ $q1 = db_select('res_manager', 'r');
 
     $r=preg_replace('/<span(.*?)>/i','',$r);
     $r=str_replace("</span>","",$r);
-
-    $r=str_replace("<p>&nbsp;</p>",'',$r);
-    $r=str_replace("<p> ","<p>",$r);
-    $r=str_replace(" <p>","<p>",$r);
-
-    $r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
-
-    $r=str_replace("&nbsp;"," ",$r);
-    $r=str_replace("  "," ",$r);
-    //$r=preg_replace('/<br(.*?)>/i','',$r);
-
+    $r=str_replace("&nbsp;","",$r);
     
+    //$r=preg_replace('/\s/i','',$r);
+    $r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
+    //--------------------------------------------------------------
+    $r=str_replace("  "," ",$r);
     $r=str_replace("â€™","'",$r);
     $r=str_replace("â€tm","'",$r);
-    
-    
-    $r=str_replace("<p></p>","<p>",$r);
-    $r=str_replace("<p><br /></p>","",$r);
-    
+    //--------------------------------------------------------------
+    $r=str_replace("a student had this reaction:","<blockquote>",$r);
     $r=str_replace("A student writes:","<blockquote>",$r);
     $r=str_replace("A practitioner writes:","<blockquote>",$r);
     $r=str_replace("A student asks:","<blockquote>",$r);
@@ -273,69 +253,66 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("The student writes:","<blockquote>",$r);
     $r=str_replace("The student continues:","<blockquote>",$r);
     $r=str_replace("reader asks:","<blockquote>",$r);
-    
+    //--------------------------------------------------------------
     $r=str_replace("Lama Shenpen replies:","</blockquote>",$r);
     $r=str_replace("Lama Shenpen responds:","</blockquote>",$r);
     $r=str_replace("Lama Shenpen:","</blockquote>",$r);
     $r=str_replace("Shenpen replies:","</blockquote>",$r);
     $r=str_replace("Shenpen:","</blockquote>",$r);
     $r=str_replace("Lama:","</blockquote>",$r);
-
-
-    $r=str_replace("<p><blockquote></p>","<blockquote>",$r);
-    $r=str_replace("<p></blockquote></p>","</blockquote>",$r);
-
-    if (substr_count($r, 'Summary: ') > 0 ) {
-      $r=str_replace('Summary: ',"",$r);
-    }
-    if (substr_count($r, 'Summary:') > 0 ) {
-      $r=str_replace('Summary:',"",$r);
-    }
-    $r=str_replace($obj1->abstract,"",$r);
-//================================================================
-$r=str_replace("<p>&nbsp;</p>",'',$r);
-    $r=str_replace("<p> ","<p>",$r);
-    $r=str_replace(" <p>","<p>",$r);
-
-    $r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
-
+    //--------------------------------------------------------------
+    $r=str_replace($obj1->abstract," ",$r);
+    $r=trim($r);
+    $r=str_replace('Summary: ',"",$r);
+    $r=str_replace('Summary:',"",$r);
+    //--------------------------------------------------------------
     $r=str_replace("&nbsp;","",$r);
-    $r=str_replace("  "," ",$r);
-    //$r=preg_replace('/<br(.*?)>/i','',$r);
-
-    
-    $r=str_replace("â€™","'",$r);
-    $r=str_replace("â€tm","'",$r);
-    
-    $r=str_replace("<p><br />","<p>",$r);
-    $r=str_replace("<p>&nbsp;","<p>",$r);
-    $r=str_replace("<p></p>","<p>",$r);
-    $r=str_replace("<blockquote><br />","<blockquote>",$r);
-    $r=str_replace("<br /><br /><blockquote>","<blockquote>",$r);
-    $r=str_replace("<br /><blockquote>","<blockquote>",$r);
-    $r=str_replace("<blockquote><br /><br />","<blockquote>",$r);
-    $r=str_replace("<blockquote><br />","<blockquote>",$r);
-    $r=str_replace("<br />&nbsp;</blockquote>","</blockquote>",$r);
-    $r=str_replace("<p>&nbsp;</p>","",$r);
-    $r=str_replace("<p><br />&nbsp;</p>","",$r);
-    $r=str_replace("<p><br />&nbsp;<br /></p>","",$r);
-    $r=str_replace("<p>&nbsp;<br /></p>","",$r);
-    $r=str_replace("<p> <br /> <blockquote> <br /> ","<blockquote>",$r);
-    $r=str_replace("<br /> <br /> </blockquote><br /> <br /> ","</blockquote>",$r);
-    $r=str_replace("<p><br /><blockquote><br />","<blockquote>",$r);
-    $r=str_replace("<br /><br /></blockquote><br /><br />","</blockquote>",$r);
-    $r=str_replace("<p><blockquote> </p>","<blockquote>",$r);
+    $r=preg_replace('/<p(.*?)>/i','',$r);
+    $r=str_replace("<p> ","",$r);
+    $r=str_replace(" <p>","",$r);
     $r=str_replace("<p>","",$r);
+    $r=str_replace("</p> ","",$r);
+    $r=str_replace(" </p>","",$r);
     $r=str_replace("</p>","",$r);
-    //$r=str_replace("","",$r);
+    //--------------------------------------------------------------
+    $r=preg_replace('/<P(.*?)>/i','',$r);
+    $r=str_replace("<P> ","",$r);
+    $r=str_replace(" <P>","",$r);
+    $r=str_replace("<P>","",$r);
+    $r=str_replace("</P> ","",$r);
+    $r=str_replace(" </P>","",$r);
+    $r=str_replace("</P>","",$r);
+    $r=preg_replace('/&nbsp;/i','',$r);
+    //--------------------------------------------------------------
+    //$r = preg_replace('/\r?\n|\r/','', $r);
+    //nl2br(string);
+    //$r=str_replace(" <br />","",$r);
+    $ar=explode("<br />",$r);
+    foreach ($ar as $key=> $value) {
+      if($value =="\n" || $value =="\r"|| $value =="\n\r"|| $value =="\r\n"|| $value ==" ")
+      {
+        //array_shift($ar);
+        unset($ar[$key]);
+        
+      }
+    }
+    $r=implode("<br />",$ar);
+    //--------------------------------------------------------------
+    $r=str_replace(" <blockquote>","<blockquote>",$r);
+    $r=str_replace("<br /><blockquote>","<blockquote>",$r);
+    $r=str_replace("<blockquote> ","<blockquote>",$r);
+    $r=str_replace("<blockquote><br />","<blockquote>",$r);
+    $r=str_replace(" </blockquote>","</blockquote>",$r);
+    $r=str_replace("<br /></blockquote>","</blockquote>",$r);
+    //--------------------------------------------------------------
+    $r = str_replace('"','',$r);
+    //$r = str_replace(array('\n',chr(10)),'<br />',$r);
+    //$r = str_replace(array('\n',chr(10)),'<br />',$r);
 
-    
-//================================================================
-    
-
-    $data[$i][4]=$r;//obj1->article;
+    //--------------------------------------------------------------
+    $data[$i][4]=$r;//$obj1->article;
     $data[$i][5]=1;
-    $data[$i][6]="basic_html";
+    $data[$i][6]="NULL";
     $i+=1;
 
   }
