@@ -242,8 +242,36 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("  "," ",$r);
     $r=str_replace("â€™","'",$r);
     $r=str_replace("â€tm","'",$r);
+
     //--------------------------------------------------------------
-    $r=str_replace("a student had this reaction:","<blockquote>",$r);
+    $ar=explode("<P class=EmailQuestion>",$r);
+    foreach ($ar as $key=> $value) {
+      if ($key < 1) continue;
+      $count=1;
+      $ar[$key]=preg_replace('/<\/P>/', "</blockquote>", $value, $count );
+    }
+    $r=implode("<P class=EmailQuestion>",$ar);
+    $r=str_replace("<P class=EmailQuestion>","<blockquote>",$r);
+    //--------------------------------------------------------------
+    $ar=explode("<p class=emailquestion>",$r);
+    foreach ($ar as $key=> $value) {
+      if ($key < 1) continue;
+      $count=1;
+      $ar[$key]=preg_replace('/<\/p>/', "</blockquote>", $value, $count );
+    }
+    $r=implode("<p class=emailquestion>",$ar);
+    $r=str_replace("<p class=emailquestion>","<blockquote>",$r);
+    //--------------------------------------------------------------
+    $ar=explode("<p class=EmailQuestion>",$r);
+    foreach ($ar as $key=> $value) {
+      if ($key < 1) continue;
+      $count=1;
+      $ar[$key]=preg_replace('/<\/p>/', "</blockquote>", $value, $count );
+    }
+    $r=implode("<p class=EmailQuestion>",$ar);
+    $r=str_replace("<p class=EmailQuestion>","<blockquote>",$r);
+    //--------------------------------------------------------------
+   $r=str_replace("a student had this reaction:","<blockquote>",$r);
     $r=str_replace("A student writes:","<blockquote>",$r);
     $r=str_replace("A practitioner writes:","<blockquote>",$r);
     $r=str_replace("A student asks:","<blockquote>",$r);
@@ -267,7 +295,7 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace('Summary:',"",$r);
     //--------------------------------------------------------------
     $r=str_replace("&nbsp;","",$r);
-   /** $r=preg_replace('/<p(.*?)>/i','',$r);
+    $r=preg_replace('/<p(.*?)>/i','',$r);
     $r=str_replace("<p> ","",$r);
     $r=str_replace(" <p>","",$r);
     $r=str_replace("<p>","",$r);
@@ -281,12 +309,16 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("<P>","",$r);
     $r=str_replace("</P> ","",$r);
     $r=str_replace(" </P>","",$r);
-    $r=str_replace("</P>","",$r);*/
+    $r=str_replace("</P>","",$r);
     $r=preg_replace('/&nbsp;/i','',$r);
     //--------------------------------------------------------------
-    //$r = preg_replace('/\r?\n|\r/','', $r);
-    //nl2br(string);
+    
+    //$r=nl2br($r);
     //$r=str_replace(" <br />","",$r);
+    //--------------------------------------------------------------
+    //$r=str_replace(array("\n",chr(10)),"<br />",$r);
+    $r = preg_replace('/\r?\n|\r/','<br /><br />', $r);
+    //--------------------------------------------------------------
     $ar=explode("<br />",$r);
     foreach ($ar as $key=> $value) {
       if($value =="\n" || $value =="\r"|| $value =="\n\r"|| $value =="\r\n"|| $value ==" ")
@@ -299,17 +331,26 @@ $q1 = db_select('res_manager', 'r');
     $r=implode("<br />",$ar);
     //--------------------------------------------------------------
     $r=str_replace(" <blockquote>","<blockquote>",$r);
+    $r=str_replace("<br /><br /><blockquote>","<blockquote>",$r);
     $r=str_replace("<br /><blockquote>","<blockquote>",$r);
+    $r=str_replace("<blockquote><br /><br />","<blockquote>",$r);
     $r=str_replace("<blockquote> ","<blockquote>",$r);
+    $r=str_replace("<blockquote><blockquote>","<blockquote>",$r);
     $r=str_replace("<blockquote><br />","<blockquote>",$r);
     $r=str_replace(" </blockquote>","</blockquote>",$r);
+    $r=str_replace("<br /><br /></blockquote>","</blockquote>",$r);
     $r=str_replace("<br /></blockquote>","</blockquote>",$r);
+    $r=str_replace("</blockquote><br /><br />","</blockquote>",$r);
+    $r=str_replace("</blockquote><br />","</blockquote>",$r);
+    $r=str_replace("</blockquote></blockquote>","</blockquote>",$r);
     //--------------------------------------------------------------
     $r = str_replace('"','',$r);
     //$r = str_replace(array('\n',chr(10)),'<br />',$r);
-    //$r = str_replace(array('\n',chr(10)),'<br />',$r);
-
-    //--------------------------------------------------------------
+    $r = str_replace("<br /><br /><br /><br /><br /><br />",'<br /><br />',$r);
+    $r = str_replace("<br /><br /><br /><br />",'<br /><br />',$r);
+    $r = preg_replace('/^<br \/><br \/>/', '', $r);  //This symbol (^) is for begining of the string.
+    $r = preg_replace('/<br \/><br \/>$/', '', $r);  //This symbol ($) is for end of the string
+    //------------------------------------------------ --------------
     $data[$i][4]=$r;//$obj1->article;
     $data[$i][5]=1;
     $data[$i][6]="NULL";
