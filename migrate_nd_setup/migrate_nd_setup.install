@@ -289,13 +289,12 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("Shenpen:","</blockquote>",$r);
     $r=str_replace("Lama:","</blockquote>",$r);
     //--------------------------------------------------------------
-    $r=str_replace($obj1->abstract,"",$r);
+    $r=str_replace($obj1->abstract," ",$r);
     $r=trim($r);
     $r=str_replace('Summary: ',"",$r);
     $r=str_replace('Summary:',"",$r);
     //--------------------------------------------------------------
-    $r=str_ireplace("<p><br /></p>","<br />",$r);
-    /**$r=str_replace("&nbsp;","",$r);
+    $r=str_replace("&nbsp;","",$r);
     $r=preg_replace('/<p(.*?)>/i','',$r);
     $r=str_replace("<p> ","",$r);
     $r=str_replace(" <p>","",$r);
@@ -311,14 +310,14 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("</P> ","",$r);
     $r=str_replace(" </P>","",$r);
     $r=str_replace("</P>","",$r);
-    $r=preg_replace('/&nbsp;/i','',$r);*/
+    $r=preg_replace('/&nbsp;/i','',$r);
     //--------------------------------------------------------------
     
     //$r=nl2br($r);
     //$r=str_replace(" <br />","",$r);
     //--------------------------------------------------------------
     //$r=str_replace(array("\n",chr(10)),"<br />",$r);
-    $r = preg_replace('/\r?\n|\r/',"", $r);
+    $r = preg_replace('/\r?\n|\r/','<br /><br />', $r);
     //--------------------------------------------------------------
     $ar=explode("<br />",$r);
     foreach ($ar as $key=> $value) {
@@ -331,26 +330,18 @@ $q1 = db_select('res_manager', 'r');
     }
     $r=implode("<br />",$ar);
     //--------------------------------------------------------------
-    $r=preg_replace('/<p(.*?)><blockquote><\/p>/i','<blockquote>',$r);
-    $r=preg_replace('/<h(.*?)><blockquote><\/h(.*?)>/i','<blockquote>',$r);
-    $r=str_ireplace("<p><blockquote></p>","<blockquote>",$r);
     $r=str_replace(" <blockquote>","<blockquote>",$r);
     $r=str_replace("<br /><br /><blockquote>","<blockquote>",$r);
     $r=str_replace("<br /><blockquote>","<blockquote>",$r);
     $r=str_replace("<blockquote><br /><br />","<blockquote>",$r);
     $r=str_replace("<blockquote> ","<blockquote>",$r);
     $r=str_replace("<blockquote><blockquote>","<blockquote>",$r);
-    $r=str_ireplace("<P><blockquote></P><blockquote>","<blockquote>",$r);
     $r=str_replace("<blockquote><br />","<blockquote>",$r);
     $r=str_replace(" </blockquote>","</blockquote>",$r);
     $r=str_replace("<br /><br /></blockquote>","</blockquote>",$r);
     $r=str_replace("<br /></blockquote>","</blockquote>",$r);
     $r=str_replace("</blockquote><br /><br />","</blockquote>",$r);
     $r=str_replace("</blockquote><br />","</blockquote>",$r);
-    $r=preg_replace('/<p(.*?)><\/blockquote><\/p>/i','</blockquote>',$r);
-    $r=preg_replace('/<h(.*?)><\/blockquote><\/h(.*?)>/i','</blockquote>',$r);
-    $r=str_ireplace("<P></blockquote></P>","</blockquote>",$r);
-    $r=preg_replace('/<blockquote><\/h(.*?)>/i','<blockquote>',$r);
     $r=str_replace("</blockquote></blockquote>","</blockquote>",$r);
     //--------------------------------------------------------------
     $r = str_replace('"','',$r);
@@ -359,13 +350,7 @@ $q1 = db_select('res_manager', 'r');
     $r = str_replace("<br /><br /><br /><br />",'<br /><br />',$r);
     $r = preg_replace('/^<br \/><br \/>/', '', $r);  //This symbol (^) is for begining of the string.
     $r = preg_replace('/<br \/><br \/>$/', '', $r);  //This symbol ($) is for end of the string
-    $r = preg_replace('/^<br \/>/', '', $r);  //This symbol (^) is for begining of the string.
-    $r = preg_replace('/<br \/>$/', '', $r);  //This symbol ($) is for end of the string
     //------------------------------------------------ --------------
-    $r = preg_replace('/^<p><\/p>/', '', $r);  //This symbol (^) is for begining of the string.
-    $r = preg_replace('/<p><\/p>$/', '', $r); 
-    $r = preg_replace('/^<P><\/P>/', '', $r);  //This symbol (^) is for begining of the string.
-    $r = preg_replace('/<P><\/P>$/', '', $r); 
     $data[$i][4]=$r;//$obj1->article;
     $data[$i][5]=1;
     $data[$i][6]="NULL";
