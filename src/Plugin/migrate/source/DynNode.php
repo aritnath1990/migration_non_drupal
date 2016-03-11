@@ -35,7 +35,7 @@ class DynNode extends SqlBase {
      * below.
      */
     $query = $this->select('migrate_nd_dyn_node', 'b')
-                 ->fields('b', ['bbid', 'title', 'abstract','article','aid','bodyformat']);
+                 ->fields('b', ['bbid', 'title', 'abstract','article','aid','bodyformat','Original']);
     $query->addExpression('UNIX_TIMESTAMP(dt_created)', 'dt_created');
     return $query;
   }
@@ -52,6 +52,7 @@ class DynNode extends SqlBase {
       'article' => $this->t('Article of ssd'),
       'aid' => $this->t('Account ID of the author'),
       'bodyformat' => $this->t('Text format i.e html or full html'),
+      'Original' => $this->t('unproccessd data'),
       'terms' => $this->t('Applicable styles'),
     ];
 

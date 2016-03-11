@@ -65,6 +65,11 @@ function migrate_nd_dyn_schema_node() {
         'length' => 255,
         'not null' => TRUE,
       ),
+      'Original' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'description' => 'Raw data of non drupal',
+      ),
     ),
     'primary key' => array('bbid'),
   );
@@ -210,6 +215,8 @@ $q1 = db_select('res_manager', 'r');
     if (substr_count($obj1->abstract, 'â€™') > 0) {
     $obj1->abstract=str_replace("â€™","'",$obj1->abstract);
     }
+    $x_abstract="";
+    $x_abstract=$obj1->abstract; //store the date of abstract before format to delete from body.
     $obj1->abstract = ucfirst($obj1->abstract); 
     $obj1->abstract=str_replace("Summary: ","",$obj1->abstract);
     $obj1->abstract=str_replace("Summary:","",$obj1->abstract);
@@ -233,8 +240,16 @@ $q1 = db_select('res_manager', 'r');
 
     $r=preg_replace('/<span(.*?)>/i','',$r);
     $r=str_replace("</span>","",$r);
-    $r=str_replace("&nbsp;","",$r);
-    
+    //$r=str_replace("&nbsp;","",$r);
+    if (preg_match("/[a-zA-Z]&nbsp;[a-zA-Z]/",$r)) {
+      $r=str_replace("&nbsp;"," ",$r);
+    }
+    else
+    {
+      $r=str_replace("&nbsp;","",$r);
+    }
+
+    //[^a-zA-Z]
     //$r=preg_replace('/\s/i','',$r);
     $r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
     //--------------------------------------------------------------
@@ -270,13 +285,14 @@ $q1 = db_select('res_manager', 'r');
     $r=implode("<p class=EmailQuestion>",$ar);
     $r=str_replace("<p class=EmailQuestion>","<blockquote>",$r);
     //--------------------------------------------------------------
-    $ar1=explode("<p class=emailquestion>",$r);
+    $ar1=explode('<p class="emailquestion">',$r);
     foreach ($ar1 as $key=> $value) {
       if ($key < 1) continue;
-      $ar1[$key]=preg_replace('/<\/p>/', "</blockquote>", $value);
+      $count=1; //only for first occurance.
+      $ar1[$key]=preg_replace('/<\/p>/', "</blockquote>", $value, $count );
     }
-    $r=implode("<p class=emailquestion>",$ar1);
-    $r=str_replace("<p class=emailquestion>","<blockquote>",$r);
+    $r=implode('<p class="emailquestion">',$ar1);
+    $r=str_replace('<p class="emailquestion">',"<blockquote>",$r);
      //--------------------------------------------------------------
    $r=str_replace("a student had this reaction:","<blockquote>",$r);
     $r=str_replace("A student writes:","<blockquote>",$r);
@@ -296,7 +312,7 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("Shenpen:","</blockquote>",$r);
     $r=str_replace("Lama:","</blockquote>",$r);
     //--------------------------------------------------------------
-    $r=str_replace($obj1->abstract,"",$r);
+    $r=str_replace($x_abstract,"",$r);
     $r=trim($r);
     $r=str_replace('Summary: ',"",$r);
     $r=str_replace('Summary:',"",$r);
@@ -387,13 +403,15 @@ $q1 = db_select('res_manager', 'r');
     //----------------------------------------------------------------
     $data[$i][4]=$r;//$obj1->article;
     $data[$i][5]=1;
-    $data[$i][6]="NULL";
+    $data[$i][6]="basic_html";
+    $data[$i][7]=$obj1->article;;
+    
     $i+=1;
 
   }
 
 
- $fields = array('bbid', 'title', 'dt_created','abstract','article','aid','bodyformat');
+ $fields = array('bbid', 'title', 'dt_created','abstract','article','aid','bodyformat','Original');
   $query = db_insert('migrate_nd_dyn_node')
            ->fields($fields);
   // Use high id numbers to avoid overwriting an existing node id.

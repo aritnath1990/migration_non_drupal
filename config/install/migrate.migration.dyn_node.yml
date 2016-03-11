@@ -29,6 +29,7 @@ process:
     plugin: migration
     migration: dyn_term
     source: terms
+  field_original: Original
   # Some Drupal fields may have multiple components we may want to set
   # separately. For example, text fields may have summaries (teasers) in
   # addition to the full text value. We use / to separate the field name from
