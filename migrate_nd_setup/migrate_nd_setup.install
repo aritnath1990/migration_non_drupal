@@ -210,12 +210,31 @@ $q1 = db_select('res_manager', 'r');
     $obj1->title=str_replace("â€","'",$obj1->title);
     }
     $data[$i][1]=$obj1->title;
+    //---------------------------------------------------------------
     $data[$i][2]=$obj1->dt_created;
-
+    //---------------------------------------------------------------
     if (substr_count($obj1->abstract, 'â€™') > 0) {
     $obj1->abstract=str_replace("â€™","'",$obj1->abstract);
     }
     $x_abstract="";
+    
+    //$obj1->abstract=str_replace('Â','',$obj1->abstract);
+    //$obj1->abstract=preg_replace('/Â\s/',"", $obj1->abstract);
+    //$obj1->abstract=str_replace('Â'.chr(32),"", $obj1->abstract);
+
+
+
+ /**$t1=explode("Â",$obj1->abstract);
+    foreach ($t1 as $key=> $value) {
+      if ($key < 1) continue;
+      $ad=substr($t1[$key],1);
+      $t1[$key]=$ad;
+    }
+    $obj1->abstract=implode("Â",$t1);
+    $obj1->abstract=str_replace("Â"," ",$obj1->abstract);
+
+*/
+
     $x_abstract=$obj1->abstract; //store the date of abstract before format to delete from body.
     $obj1->abstract = ucfirst($obj1->abstract); 
     $obj1->abstract=str_replace("Summary: ","",$obj1->abstract);
@@ -251,7 +270,9 @@ $q1 = db_select('res_manager', 'r');
 
     //[^a-zA-Z]
     //$r=preg_replace('/\s/i','',$r);
-    $r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
+    $r=preg_replace('/<a(.*?)>/i','',$r);
+    $r=preg_replace('/<\/a>/i','',$r);
+    //$r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
     //--------------------------------------------------------------
     $r=str_replace("  "," ",$r);
     $r=str_replace("â€™","'",$r);
@@ -284,6 +305,15 @@ $q1 = db_select('res_manager', 'r');
     }
     $r=implode("<p class=EmailQuestion>",$ar);
     $r=str_replace("<p class=EmailQuestion>","<blockquote>",$r);
+     //--------------------------------------------------------------
+    $ar=explode('<p class="EmailQuestion">',$r);
+    foreach ($ar as $key=> $value) {
+      if ($key < 1) continue;
+      $count=1;
+      $ar[$key]=preg_replace('/<\/p>/', "</blockquote>", $value, $count );
+    }
+    $r=implode('<p class="EmailQuestion">',$ar);
+    $r=str_replace('<p class="EmailQuestion">',"<blockquote>",$r);
     //--------------------------------------------------------------
     $ar1=explode('<p class="emailquestion">',$r);
     foreach ($ar1 as $key=> $value) {
@@ -297,7 +327,7 @@ $q1 = db_select('res_manager', 'r');
    $r=str_replace("a student had this reaction:","<blockquote>",$r);
     $r=str_replace("A student writes:","<blockquote>",$r);
     $r=str_replace("A practitioner writes:","<blockquote>",$r);
-    $r=str_replace("A student asks:","<blockquote>",$r);
+    $r=str_ireplace("A student asks:","<blockquote>",$r);
     $r=str_replace("The student asks:","<blockquote>",$r);
     $r=str_replace("Student:","<blockquote>",$r);
     $r=str_replace("A student says:","<blockquote>",$r);
@@ -400,6 +430,7 @@ $q1 = db_select('res_manager', 'r');
     $r=str_ireplace("<blockquote></p>","<blockquote>",$r);
     $r=str_replace("<blockquote><blockquote>","<blockquote>",$r);
     $r=str_replace("</blockquote></blockquote>","</blockquote>",$r);
+    $r=str_replace("</blockquote><blockquote>","<br /><br />",$r);
     //----------------------------------------------------------------
     $data[$i][4]=$r;//$obj1->article;
     $data[$i][5]=1;
