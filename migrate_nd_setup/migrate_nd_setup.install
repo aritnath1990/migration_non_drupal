@@ -199,7 +199,7 @@ $q1 = db_select('res_manager', 'r');
   $obj=$q1->fields('r',array('id','title','dt_created','abstract','article'))//SELECT 
         ->condition('category_id', '20')
         ->execute()->fetchAll();
-  
+
   $i=0;
   foreach ( $obj as $obj1 ) {
     $data[$i][0]=$obj1->id;
@@ -217,29 +217,25 @@ $q1 = db_select('res_manager', 'r');
     $obj1->abstract=str_replace("â€™","'",$obj1->abstract);
     }
     $x_abstract="";
-    
-    //$obj1->abstract=str_replace('Â','',$obj1->abstract);
-    //$obj1->abstract=preg_replace('/Â\s/',"", $obj1->abstract);
-    //$obj1->abstract=str_replace('Â'.chr(32),"", $obj1->abstract);
+   
 
-
-
- /**$t1=explode("Â",$obj1->abstract);
+    if (substr_count($obj1->abstract, 'Â') > 0) {
+    $t1=explode("Â",$obj1->abstract);
     foreach ($t1 as $key=> $value) {
       if ($key < 1) continue;
-      $ad=substr($t1[$key],1);
-      $t1[$key]=$ad;
+      $ad=$t1[$key];//substr($t1[$key],1);
+      if(strlen($ad)>1){
+      $t1[$key]= htmlentities($ad);//mysql_real_escape_string(htmlentities($ad));
+      $t1[$key]=str_replace("&nbsp;","",$t1[$key]);
+    }
     }
     $obj1->abstract=implode("Â",$t1);
+    }
     $obj1->abstract=str_replace("Â"," ",$obj1->abstract);
-
-*/
-
     $x_abstract=$obj1->abstract; //store the date of abstract before format to delete from body.
     $obj1->abstract = ucfirst($obj1->abstract); 
     $obj1->abstract=str_replace("Summary: ","",$obj1->abstract);
     $obj1->abstract=str_replace("Summary:","",$obj1->abstract);
-
     $a=substr($obj1->abstract, -1);
     if($a!="." && $a!="?") {
     $obj1->abstract =$obj1->abstract ."."; 
@@ -259,7 +255,7 @@ $q1 = db_select('res_manager', 'r');
 
     $r=preg_replace('/<span(.*?)>/i','',$r);
     $r=str_replace("</span>","",$r);
-    //$r=str_replace("&nbsp;","",$r);
+
     if (preg_match("/[a-zA-Z]&nbsp;[a-zA-Z]/",$r)) {
       $r=str_replace("&nbsp;"," ",$r);
     }
@@ -268,16 +264,12 @@ $q1 = db_select('res_manager', 'r');
       $r=str_replace("&nbsp;","",$r);
     }
 
-    //[^a-zA-Z]
-    //$r=preg_replace('/\s/i','',$r);
     $r=preg_replace('/<a(.*?)>/i','',$r);
     $r=preg_replace('/<\/a>/i','',$r);
-    //$r=preg_replace('/<a(.*?)>(.*?)<\/a>/i','',$r);
     //--------------------------------------------------------------
     $r=str_replace("  "," ",$r);
     $r=str_replace("â€™","'",$r);
     $r=str_replace("â€tm","'",$r);
-
     //--------------------------------------------------------------
     $ar=explode("<P class=EmailQuestion>",$r);
     foreach ($ar as $key=> $value) {
@@ -324,7 +316,7 @@ $q1 = db_select('res_manager', 'r');
     $r=implode('<p class="emailquestion">',$ar1);
     $r=str_replace('<p class="emailquestion">',"<blockquote>",$r);
      //--------------------------------------------------------------
-   $r=str_replace("a student had this reaction:","<blockquote>",$r);
+    $r=str_replace("a student had this reaction:","<blockquote>",$r);
     $r=str_replace("A student writes:","<blockquote>",$r);
     $r=str_replace("A practitioner writes:","<blockquote>",$r);
     $r=str_ireplace("A student asks:","<blockquote>",$r);
@@ -348,47 +340,8 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace('Summary:',"",$r);
     //--------------------------------------------------------------
     $r=str_ireplace("<p><br /></p>","<br />",$r);
-    /**$r=str_replace("&nbsp;","",$r);
-    $r=preg_replace('/<p(.*?)>/i','',$r);
-    $r=str_replace("<p> ","",$r);
-    $r=str_replace(" <p>","",$r);
-    $r=str_replace("<p>","",$r);
-    $r=str_replace("</p> ","",$r);
-    $r=str_replace(" </p>","",$r);
-    $r=str_replace("</p>","",$r);
     //--------------------------------------------------------------
-    $r=preg_replace('/<P(.*?)>/i','',$r);
-    $r=str_replace("<P> ","",$r);
-    $r=str_replace(" <P>","",$r);
-    $r=str_replace("<P>","",$r);
-    $r=str_replace("</P> ","",$r);
-    $r=str_replace(" </P>","",$r);
-    $r=str_replace("</P>","",$r);
-    $r=preg_replace('/&nbsp;/i','',$r);*/
-    //--------------------------------------------------------------
-    
-    //$r=nl2br($r);
-    //$r=str_replace(" <br />","",$r);
-    //--------------------------------------------------------------
-    //$r=str_replace(array("\n",chr(10)),"<br />",$r);
-    //$r = preg_replace('/\r?\n|\r/',"", $r);
-    //--------------------------------------------------------------
-    /**$ar=explode("<br />",$r);
-    foreach ($ar as $key=> $value) {
-      if($value =="\n" || $value =="\r"|| $value =="\n\r"|| $value =="\r\n"|| $value ==" ")
-      {
-        //array_shift($ar);
-        unset($ar[$key]);
-        
-      }
-    }
-    $r=implode("<br />",$ar);*/
-    $r = preg_replace('/<br \/>/', "", $r); 
-    //$r = str_replace(array('\n',chr(10)),'',$r);
-    //--------------------------------------------------------------
-    //$r=preg_replace('/<p(.*?)><\/p>/i','<blockquote>',$r);
     $r=preg_replace('/<p(.*?)><blockquote><\/p>/i','<blockquote>',$r);
-    //$r=preg_replace('/<h(.*?)><blockquote><\/h(.*?)>/i','<blockquote>',$r);
     $r=str_ireplace("<p><blockquote></p>","<blockquote>",$r);
     $r=str_replace(" <blockquote>","<blockquote>",$r);
     $r=str_replace("<br /><br /><blockquote>","<blockquote>",$r);
@@ -402,25 +355,22 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("<br /><br /></blockquote>","</blockquote>",$r);
     $r=str_replace("<br /></blockquote>","</blockquote>",$r);
     $r=str_replace("</blockquote><br /><br />","</blockquote>",$r);
+    $r=str_replace("</blockquote> <br /><br />","</blockquote>",$r);
     $r=str_replace("</blockquote><br />","</blockquote>",$r);
     $r=preg_replace('/<p(.*?)><\/blockquote><\/p>/i','</blockquote>',$r);
-    //$r=preg_replace('/<h(.*?)><\/blockquote><\/h(.*?)>/i','</blockquote>',$r);
     $r=str_ireplace("<P></blockquote></P>","</blockquote>",$r);
-    //$r=preg_replace('/<blockquote><\/h(.*?)>/i','<blockquote>',$r);
     $r=str_replace("</blockquote></blockquote>","</blockquote>",$r);
     //--------------------------------------------------------------
     $r = str_replace('"','',$r);
-    //$r = str_replace(array('\n',chr(10)),"",$r);
-    //$r = str_replace("<br /><br /><br /><br /><br /><br />",'<br /><br />',$r);
-    //$r = str_replace("<br /><br /><br /><br />",'<br /><br />',$r);
     $r = preg_replace('/^<br \/><br \/>/', '', $r);  //This symbol (^) is for begining of the string.
     $r = preg_replace('/<br \/><br \/>$/', '', $r);  //This symbol ($) is for end of the string
     $r = preg_replace('/^<br \/>/', '', $r);  //This symbol (^) is for begining of the string.
     $r = preg_replace('/<br \/>$/', '', $r);  //This symbol ($) is for end of the string
+    $r = preg_replace('/<br \/> <br \/>/', "2", $r); 
+    $r = preg_replace('/<br \/>/', "", $r); 
     //------------------------------------------------ --------------
     $r = preg_replace('/^<p><\/p>/i', "", $r);  //This symbol (^) is for begining of the string.
     $r = preg_replace('/<p><\/p>$/i', "", $r); 
-    //$r = str_ireplace(array('\n',chr(10)),'',$r);
     $r = preg_replace('/\r?\n|\r$/',"", $r);
     $r = preg_replace('/^\r?\n|\r/',"", $r);
     $r = preg_replace('/<br \/>/', "", $r); 
@@ -431,22 +381,18 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("<blockquote><blockquote>","<blockquote>",$r);
     $r=str_replace("</blockquote></blockquote>","</blockquote>",$r);
     $r=str_replace("</blockquote><blockquote>","<br /><br />",$r);
+    $r = str_replace('2', "<br /><br />", $r); 
     //----------------------------------------------------------------
     $data[$i][4]=$r;//$obj1->article;
     $data[$i][5]=1;
     $data[$i][6]="basic_html";
     $data[$i][7]=$obj1->article;;
-    
     $i+=1;
-
   }
 
-
- $fields = array('bbid', 'title', 'dt_created','abstract','article','aid','bodyformat','Original');
+  $fields = array('bbid', 'title', 'dt_created','abstract','article','aid','bodyformat','Original');
   $query = db_insert('migrate_nd_dyn_node')
            ->fields($fields);
-  // Use high id numbers to avoid overwriting an existing node id.
-  
   foreach ($data as $row) {
     $query->values(array_combine($fields, $row));
   }
