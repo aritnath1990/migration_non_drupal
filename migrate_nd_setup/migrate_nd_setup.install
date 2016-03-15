@@ -266,6 +266,8 @@ $q1 = db_select('res_manager', 'r');
 
     $r=preg_replace('/<a(.*?)>/i','',$r);
     $r=preg_replace('/<\/a>/i','',$r);
+    $r=preg_replace('/<h(.*?)>/i','',$r);
+    
     //--------------------------------------------------------------
     $r=str_replace("  "," ",$r);
     $r=str_replace("â€™","'",$r);
@@ -366,7 +368,7 @@ $q1 = db_select('res_manager', 'r');
     $r = preg_replace('/<br \/><br \/>$/', '', $r);  //This symbol ($) is for end of the string
     $r = preg_replace('/^<br \/>/', '', $r);  //This symbol (^) is for begining of the string.
     $r = preg_replace('/<br \/>$/', '', $r);  //This symbol ($) is for end of the string
-    $r = preg_replace('/<br \/> <br \/>/', "2", $r); 
+    $r = preg_replace('/<br \/> <br \/>/', "ARITNATH", $r); 
     $r = preg_replace('/<br \/>/', "", $r); 
     //------------------------------------------------ --------------
     $r = preg_replace('/^<p><\/p>/i', "", $r);  //This symbol (^) is for begining of the string.
@@ -381,7 +383,7 @@ $q1 = db_select('res_manager', 'r');
     $r=str_replace("<blockquote><blockquote>","<blockquote>",$r);
     $r=str_replace("</blockquote></blockquote>","</blockquote>",$r);
     $r=str_replace("</blockquote><blockquote>","<br /><br />",$r);
-    $r = str_replace('2', "<br /><br />", $r); 
+    $r = str_replace('ARITNATH', "<br /><br />", $r); 
     //----------------------------------------------------------------
     $data[$i][4]=$r;//$obj1->article;
     $data[$i][5]=1;
